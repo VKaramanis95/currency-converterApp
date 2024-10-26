@@ -14,7 +14,7 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(express.json()); // This is crucial for parsing JSON request bodies
+app.use(express.json()); // This should be before defining your routes
 
 // Routes
 app.use('/api/auth', authRoutes);

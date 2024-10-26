@@ -4,12 +4,17 @@ const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
     try {
-        console.log(req.body); // Log the incoming request body
         const { username, password } = req.body;
 
         // Check if username and password are provided
         if (!username || !password) {
             return res.status(400).json({ message: 'Username and password are required' });
+        }
+
+        // Check if the user already exists
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ message: 'User already exists' });
         }
 
         // Hash the password
@@ -26,25 +31,14 @@ exports.register = async (req, res) => {
     }
 };
 
-
 exports.login = async (req, res) => {
-    try {
-        const { username, password } = req.body;
+    const { username, password } = req.body;
 
-        // Check if username and password are provided
-        if (!username || !password) {
-            return res.status(400).json({ message: 'Username and password are required' });
-        }
-
-        const user = await User.findOne({ username });
-        if (!user || !(await bcrypt.compare(password, user.password))) {
-            return res.status(401).json({ message: 'Invalid credentials' });
-        }
-
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+    const user = await User.findOne({ username });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+        return res.status(401).json({ message: 'Invalid credentials' });
     }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.json({ token });
 };
