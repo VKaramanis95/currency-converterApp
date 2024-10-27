@@ -1,26 +1,25 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const cors = require('cors');
+const authRoutes = require('./routes/authRoutes');
+const currencyRoutes = require('./routes/currencyRoutes');
 const connectDB = require('./config/db');
-const authRoutes = require('./routes/auth');
+const conversionRoutes = require('./routes/conversionRoutes'); // Ensure this is present
 
-dotenv.config();
-
-// Connect to MongoDB
-connectDB();
 
 const app = express();
+app.use(express.json());
 
-// Middleware
-app.use(cors());
-app.use(express.json()); // This should be before defining your routes
 
-// Routes
-app.use('/api/auth', authRoutes);
+connectDB();
+console.log('Mongo URI:', process.env.MONGO_URI);
+
+app.use('/api/auth', authRoutes); // Auth routes
+app.use('/api/currency', currencyRoutes); // Currency routes
+
+app.use('/api/conversion', conversionRoutes); // Conversion routes
 
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
