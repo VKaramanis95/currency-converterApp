@@ -9,9 +9,15 @@ router.post('/convert', async (req, res) => {
         const fromCurrency = await currency.findOne({ code: from });
         const toCurrency = await currency.findOne({ code: to });
 
-        if (!fromCurrency || !toCurrency) {
-            return res.status(404).json({ message: "Currency not found" });
-        }
+         // Check if the source currency exists
+         if (!fromCurrency) {
+                return res.status(404).json({ message: `Sorry, the currency '${from}' is not in the database.` });
+         }
+
+         // Check if the target currency exists
+         if (!toCurrency) {
+                return res.status(404).json({ message: `Sorry, the currency '${to}' is not in the database.` });
+         }
 
         const convertedAmount = (originalAmount / fromCurrency.rate) * toCurrency.rate;
 
