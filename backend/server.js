@@ -5,14 +5,15 @@ const authRoutes = require('./routes/authRoutes');
 const currencyRoutes = require('./routes/currencyRoutes');
 const connectDB = require('./config/db');
 const conversionRoutes = require('./routes/conversionRoutes'); // Ensure this is present
+const cors = require('cors');
 
 
 const app = express();
+app.use(cors()); // Enable CORS for all routes
 app.use(express.json());
 
 
 connectDB();
-console.log('Mongo URI:', process.env.MONGO_URI);
 
 app.use('/api/auth', authRoutes); // Auth routes
 app.use('/api/currency', currencyRoutes); // Currency routes
