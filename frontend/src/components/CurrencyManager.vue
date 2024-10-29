@@ -1,26 +1,63 @@
 <template>
     <div class="currency-manager">
       <h2>Currency Management</h2>
-      <form @submit.prevent="addCurrency">
-        <input v-model="newCurrency.code" placeholder="Currency Code (e.g., USD)" required />
-        <input v-model="newCurrency.rate" type="number" step="any"  placeholder="Exchange Rate" required />
-        <button type="submit">Add Currency</button>
+      <form @submit.prevent="addCurrency" class="currency-form">
+        <input
+          v-model="newCurrency.code"
+          class="currency-input"
+          placeholder="Currency Code (e.g., USD)"
+          required
+          aria-label="Currency Code"
+        />
+        <input
+          v-model="newCurrency.rate"
+          type="number"
+          step="any"
+          class="currency-input"
+          placeholder="Exchange Rate"
+          required
+          aria-label="Exchange Rate"
+        />
+        <button type="submit" class="submit-button">Add Currency</button>
       </form>
   
-      <div v-if="currencies.length">
+      <div v-if="loading" class="loading">Loading currencies...</div>
+  
+      <div>
+        <input
+          v-model="searchQuery"
+          class="currency-search"
+          placeholder="Search for a currency..."
+          aria-label="Search Currency"
+        />
+      </div>
+  
+      <div v-if="error" class="error">{{ error }}</div>
+      <div v-if="success" class="success">{{ success }}</div> <!-- Success message-->
+
+      <div v-if="filteredCurrencies.length && !loading">
         <h3>Existing Currencies</h3>
-        <ul>
-          <li v-for="currency in currencies" :key="currency._id.$oid">
+        <ul class="currency-list">
+          <li
+            v-for="currency in filteredCurrencies"
+            :key="currency._id.$oid"
+            class="currency-item"
+          >
             <span>{{ currency.code }}: {{ currency.rate }}</span>
-            <button @click="editCurrency(currency)">Edit</button>
-            <button @click="deleteCurrency(currency._id)">Delete</button>
+            <div class="button-group">
+              <button @click="editCurrency(currency)" class="action-button">Edit</button>
+              <button @click="deleteCurrency(currency._id)" class="action-button delete">Delete</button>
+            </div>
           </li>
         </ul>
       </div>
   
       <div v-if="error" class="error">{{ error }}</div>
+      <div v-if="success" class="success">{{ success }}</div> <!-- Success message-->
     </div>
   </template>
+  
+  
   
   <script>
   import axios from 'axios';
@@ -36,73 +73,215 @@
           rate: null,
         },
         error: null,
+        success: null,
+        loading: false,
+        searchQuery: '',
       };
     },
     created() {
       this.fetchCurrencies();
     },
+    computed: {
+      filteredCurrencies() {
+        const query = this.searchQuery.toLowerCase();
+        return this.currencies.filter(currency =>
+          currency.code.toLowerCase().includes(query)
+        );
+      },
+    },
     methods: {
-  async fetchCurrencies() {
-    try {
-      const response = await axios.get('http://localhost:5000/api/currency/');
-      this.currencies = response.data;
-    } catch (err) {
-      this.error = 'Failed to fetch currencies';
-    }
-  },
+      async fetchCurrencies() {
+        this.loading = true;
+        try {
+          const response = await axios.get('http://localhost:5000/api/currency/');
+          this.currencies = response.data;
+        } catch (err) {
+          this.error = 'Failed to fetch currencies';
+        } finally {
+          this.loading = false;
+        }
+      },
   
-  async addCurrency() {
-  this.error = null;
-  try {
-    await axios.post('http://localhost:5000/api/currency', {
-      code: this.newCurrency.code,
-      rate: this.newCurrency.rate,
-    });
-    this.newCurrency.code = '';
-    this.newCurrency.rate = null;
-    this.fetchCurrencies(); // Refresh the list
-  } catch (err) {
-    this.error = 'Failed to add currency';
-  }
-},
-
+      async addCurrency() {
+        this.error = null; // Clear previous error message
+        this.success = null; // Clear previous success message
   
-  async deleteCurrency(id) {
-    this.error = null;
-    try {
-      await axios.delete(`http://localhost:5000/api/currency/${id}`);
-      this.fetchCurrencies(); // Refresh the list
-    } catch (err) {
-      this.error = 'Failed to delete currency';
-    }
-  },
+        if (!this.validateCurrencyCode(this.newCurrency.code)) {
+          this.error = 'Currency code must be exactly 3 letters';
+          return;
+        }
   
-  async editCurrency(currency) {
-    const newRate = prompt('Enter new exchange rate:', currency.rate);
-    if (newRate !== null) {
-      this.error = null;
-      try {
-        await axios.put(`http://localhost:5000/api/currency/${currency.code}`, {
-          rate: newRate,
-        });
-        this.fetchCurrencies(); // Refresh the list
-      } catch (err) {
-        this.error = 'Failed to update currency';
-      }
-    }
-  },
-
-  logout() {
-    localStorage.removeItem('token'); // Clear the token
-    const router = useRouter(); // Use the router
-    router.push('/'); // Redirect to the main page
-  },
-}
-
+        // Check if currency already exists
+        const existingCurrency = this.currencies.find(currency => currency.code === this.newCurrency.code.toUpperCase());
+        if (existingCurrency) {
+          this.error = 'Currency already exists! Please provide a unique currency code.';
+          return;
+        }
+  
+        try {
+          await axios.post('http://localhost:5000/api/currency', {
+            code: this.newCurrency.code.toUpperCase(),
+            rate: this.newCurrency.rate,
+          });
+          this.newCurrency.code = '';
+          this.newCurrency.rate = null;
+          this.fetchCurrencies(); // Refresh the list
+          this.success = 'Currency added successfully!'; // Set success message
+        } catch (err) {
+          this.error = 'Failed to add currency';
+        }
+      },
+  
+      async deleteCurrency(id) {
+        this.error = null;
+        this.success = null; // Clear success message
+        try {
+          await axios.delete(`http://localhost:5000/api/currency/${id}`);
+          this.fetchCurrencies(); // Refresh the list
+          this.success = 'Currency deleted successfully!'; // Optional success message for deletion
+        } catch (err) {
+          this.error = 'Failed to delete currency';
+        }
+      },
+  
+      async editCurrency(currency) {
+        const newRate = prompt('Enter new exchange rate:', currency.rate);
+        if (newRate !== null) {
+          this.error = null;
+          this.success = null; // Clear success message
+          try {
+            await axios.put(`http://localhost:5000/api/currency/${currency.code}`, {
+              rate: newRate,
+            });
+            this.fetchCurrencies(); // Refresh the list
+            this.success = 'Currency updated successfully!'; // Optional success message for updates
+          } catch (err) {
+            this.error = 'Failed to update currency! It must be only numbers!';
+          }
+        }
+      },
+  
+      validateCurrencyCode(code) {
+        return /^[A-Z]{3}$/.test(code.toUpperCase());
+      },
+  
+      logout() {
+        localStorage.removeItem('token'); // Clear the token
+        const router = useRouter(); // Use the router
+        router.push('/'); // Redirect to the main page
+      },
+    },
   };
   </script>
   
+
+
+  
   <style scoped>
-  /* Add your styles here */
+  .currency-manager {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2, h3 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .currency-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .currency-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+  }
+  
+  .currency-input:focus {
+    border-color: #007bff;
+  }
+  
+  .submit-button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .submit-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .loading {
+    color: #888;
+  }
+  
+  .currency-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .currency-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .action-button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #28a745;
+    color: white;
+    transition: background-color 0.3s;
+  }
+  
+  .action-button:hover {
+    background-color: #218838;
+  }
+  
+  .action-button.delete {
+    background-color: #dc3545;
+  }
+  
+  .action-button.delete:hover {
+    background-color: #c82333;
+  }
+  
+  .error {
+    color: #dc3545;
+    margin-top: 20px;
+  }
+  .currency-search {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+  }
+  
+  .currency-search:focus {
+    border-color: #007bff;
+  }
   </style>
   
