@@ -6,6 +6,9 @@ const currencySchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true, // Ensure the code is unique
+        uppercase: true,
+        minlength: 3,
+        maxlength: 3,
     },
     rate: {
         type: Number, // Enforce rate as a Number (accepts float or int)

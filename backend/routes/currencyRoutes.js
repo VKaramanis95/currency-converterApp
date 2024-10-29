@@ -1,28 +1,55 @@
+// routes/currencyRoutes.js
+
 const express = require('express');
-const mongoose = require('mongoose'); // Import mongoose
-const Currency = require('../models/currency'); // Adjust the path as necessary
+const mongoose = require('mongoose');
+const { body, param, validationResult } = require('express-validator');
+const Currency = require('../models/currency'); // Adjust path if necessary
 const router = express.Router();
 
-// POST: Add a new currency
-router.post('/', async (req, res) => {
-    const { code, rate } = req.body;
-  
-    try {
-      // Check if the currency code already exists
-      let currency = await Currency.findOne({ code });
-      if (currency) {
-        return res.status(400).json({ message: 'Currency code already exists' });
-      }
-  
-      // Create a new currency document
-      currency = new Currency({ code, rate });
-      await currency.save();
-      return res.status(201).json(currency);
-    } catch (error) {
-      console.error('Error adding currency:', error);
-      return res.status(500).json({ message: 'Server error', error: error.message });
+// Middleware to handle validation errors
+const handleValidationErrors = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array().map(err => err.msg) });
     }
-  });  
+    next();
+};
+
+// POST: Add a new currency with validation
+router.post(
+    '/',
+    [
+        body('code')
+            .isLength({ min: 3, max: 3 })
+            .withMessage('Currency code must be exactly 3 letters.')
+            .isAlpha()
+            .withMessage('Currency code must contain only letters.')
+            .toUpperCase(),
+        body('rate')
+            .isFloat({ gt: 0 })
+            .withMessage('Exchange rate must be a positive number.'),
+    ],
+    handleValidationErrors,
+    async (req, res) => {
+        const { code, rate } = req.body;
+
+        try {
+            // Check if the currency code already exists
+            let currency = await Currency.findOne({ code });
+            if (currency) {
+                return res.status(400).json({ message: 'Currency code already exists' });
+            }
+
+            // Create a new currency document
+            currency = new Currency({ code, rate });
+            await currency.save();
+            return res.status(201).json(currency);
+        } catch (error) {
+            console.error('Error adding currency:', error);
+            return res.status(500).json({ message: 'Server error', error: error.message });
+        }
+    }
+);
 
 // READ: Get all currencies
 router.get('/', async (req, res) => {
@@ -37,52 +64,56 @@ router.get('/', async (req, res) => {
 
 // GET: Retrieve a specific currency by code
 router.get('/:code', async (req, res) => {
-    const { code } = req.params;  // Extract the currency code from the request parameters
+    const { code } = req.params;
 
     try {
-        const currency = await Currency.findOne({ code });  // Find the currency by code
+        const currency = await Currency.findOne({ code });
         if (!currency) {
             return res.status(404).json({ message: 'Currency not found' });
         }
-        return res.status(200).json(currency);  // Return the found currency
+        return res.status(200).json(currency);
     } catch (error) {
         console.error('Error retrieving currency:', error);
         return res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
 
-// UPDATE: Update the rate of a currency by code or ID
-router.put('/:identifier', async (req, res) => {
-    const { identifier } = req.params; // Can be code or ID
-    const { rate } = req.body; // Expecting rate in the request body
+// UPDATE: Update the rate of a currency by code or ID with validation
+router.put(
+    '/:identifier',
+    [
+        param('identifier').custom((value) => {
+            // Allow identifier to be either a 3-letter code or a valid ObjectId
+            return /^[A-Z]{3}$/.test(value) || mongoose.Types.ObjectId.isValid(value);
+        }).withMessage('Identifier must be a 3-letter code or a valid ObjectId.'),
+        body('rate')
+            .isFloat({ gt: 0 })
+            .withMessage('Exchange rate must be a positive number.'),
+    ],
+    handleValidationErrors,
+    async (req, res) => {
+        const { identifier } = req.params;
+        const { rate } = req.body;
 
-    try {
-        // Ensure rate is provided
-        if (rate === undefined) {
-            return res.status(400).json({ message: 'Rate is required.' });
+        try {
+            const isObjectId = mongoose.Types.ObjectId.isValid(identifier);
+            const currency = await Currency.findOneAndUpdate(
+                { $or: [{ _id: isObjectId ? identifier : undefined }, { code: identifier }] },
+                { rate },
+                { new: true }
+            );
+
+            if (!currency) {
+                return res.status(404).json({ message: 'Currency not found' });
+            }
+
+            return res.status(200).json(currency);
+        } catch (error) {
+            console.error('Error updating currency:', error);
+            return res.status(500).json({ message: 'Server error', error: error.message });
         }
-
-        // Check if identifier is a valid ObjectId
-        const isObjectId = mongoose.Types.ObjectId.isValid(identifier);
-
-        // Find the currency by code or ID
-        const currency = await Currency.findOneAndUpdate(
-            { $or: [{ _id: isObjectId ? identifier : undefined }, { code: identifier }] },
-            { rate },
-            { new: true } // Return the updated document
-        );
-
-        // Check if currency was found
-        if (!currency) {
-            return res.status(404).json({ message: 'Currency not found' });
-        }
-
-        return res.status(200).json(currency); // Return the updated currency
-    } catch (error) {
-        console.error('Error updating currency:', error); // Log the error for debugging
-        return res.status(500).json({ message: 'Server error', error: error.message }); // Return error message
     }
-});
+);
 
 // DELETE: Remove a currency by ID
 router.delete('/:id', async (req, res) => {
@@ -100,4 +131,4 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-module.exports = router; // Make sure to export the router
+module.exports = router;
