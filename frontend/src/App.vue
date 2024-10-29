@@ -5,6 +5,7 @@
       <nav>
         <router-link to="/">Home</router-link>
         <template v-if="isLoggedIn">
+          <button @click="goToCurrencyManager">Currency Manager</button>
           <button @click="logout">Logout</button>
         </template>
         <template v-else>
@@ -34,8 +35,11 @@ export default {
       isLoggedIn.value = false; // Update the reactive variable
       router.push('/'); // Redirect to home after logout
     };
+    const goToCurrencyManager = () => {
+      router.push('/manage-currencies'); // Navigate to the Currency Manager page
+    };
 
-    return { isLoggedIn, logout };
+    return { isLoggedIn, logout, goToCurrencyManager };
   },
 };
 </script>
