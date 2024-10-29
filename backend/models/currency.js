@@ -8,9 +8,13 @@ const currencySchema = new mongoose.Schema({
         unique: true, // Ensure the code is unique
     },
     rate: {
-        type: Number,
+        type: Number, // Enforce rate as a Number (accepts float or int)
         required: true,
-    },
+        validate: {
+          validator: Number.isFinite, // Ensure the rate is a finite number
+          message: props => `${props.value} is not a valid rate!`,
+        },
+      },
 });
 
 const Currency = mongoose.model('currency', currencySchema);

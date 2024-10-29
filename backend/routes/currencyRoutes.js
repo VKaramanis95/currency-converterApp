@@ -3,26 +3,26 @@ const mongoose = require('mongoose'); // Import mongoose
 const Currency = require('../models/currency'); // Adjust the path as necessary
 const router = express.Router();
 
-// CREATE: Add a new currency
+// POST: Add a new currency
 router.post('/', async (req, res) => {
     const { code, rate } = req.body;
-
+  
     try {
-        // Check if currency already exists
-        const existingCurrency = await Currency.findOne({ code });
-        if (existingCurrency) {
-            return res.status(400).json({ message: 'Currency with this code already exists.' });
-        }
-
-        // Create new currency
-        const currency = new Currency({ code, rate });
-        await currency.save();
-        return res.status(201).json(currency);
+      // Check if the currency code already exists
+      let currency = await Currency.findOne({ code });
+      if (currency) {
+        return res.status(400).json({ message: 'Currency code already exists' });
+      }
+  
+      // Create a new currency document
+      currency = new Currency({ code, rate });
+      await currency.save();
+      return res.status(201).json(currency);
     } catch (error) {
-        console.error('Error adding currency:', error);
-        return res.status(500).json({ message: 'Server error', error: error.message });
+      console.error('Error adding currency:', error);
+      return res.status(500).json({ message: 'Server error', error: error.message });
     }
-});
+  });  
 
 // READ: Get all currencies
 router.get('/', async (req, res) => {
