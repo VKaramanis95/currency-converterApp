@@ -44,45 +44,4 @@ export default {
 };
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 30px;
-}
 
-header {
-  background-color: #f8f9fa;
-  padding: 20px;
-  border-bottom: 1px solid #ccc;
-}
-
-nav {
-  margin: 10px 0;
-}
-
-nav a {
-  margin: 0 15px;
-  text-decoration: none;
-  color: #007bff;
-}
-
-nav button {
-  background: none;
-  border: none;
-  color: #007bff;
-  cursor: pointer;
-  font-size: 1em;
-}
-
-nav a:hover, nav button:hover {
-  text-decoration: underline;
-}
-
-main {
-  padding: 20px;
-}
-</style>
