@@ -2,25 +2,33 @@
   <div class="currency-converter">
     <h2>Currency Converter</h2>
     <form @submit.prevent="convertCurrency">
-      <div>
-        <label for="fromCurrency">From Currency:</label>
-        <input
-          v-model="fromCurrency"
-          @input="convertToUppercase('fromCurrency')"
-          type="text"
-          placeholder="e.g., USD"
-          required
-        />
-      </div>
-      <div>
-        <label for="toCurrency">To Currency:</label>
-        <input
-          v-model="toCurrency"
-          @input="convertToUppercase('toCurrency')"
-          type="text"
-          placeholder="e.g., EUR" 
-          required
-        />
+      <div class="currency-inputs">
+        <div>
+          <label for="fromCurrency">From Currency:</label>
+          <input
+            v-model="fromCurrency"
+            @input="convertToUppercase('fromCurrency')"
+            type="text"
+            placeholder="e.g., USD"
+            required
+          />
+        </div>
+        
+        <!-- Swap Icon -->
+        <div class="swap-icon" @click="swapCurrencies">
+          <i class="fas fa-exchange-alt"></i>
+        </div>
+        
+        <div>
+          <label for="toCurrency">To Currency:</label>
+          <input
+            v-model="toCurrency"
+            @input="convertToUppercase('toCurrency')"
+            type="text"
+            placeholder="e.g., EUR" 
+            required
+          />
+        </div>
       </div>
       
       <div>
@@ -40,6 +48,7 @@
     <div v-if="error" class="error">{{ error }}</div> <!-- Display any error messages -->
   </div>
 </template>
+
 
 
 <script>
@@ -100,7 +109,6 @@ export default {
         this.error = err.response ? err.response.data.message : 'Network Error'; // Handle errors gracefully
       }
     },
-    
     // Method to reset the form
     resetForm() {
       this.amount = null;
@@ -110,9 +118,35 @@ export default {
       this.error = null; // Clear any error message
       this.amountError = null; // Clear amount error message
     },
+    // Method to swap the currency values
+    swapCurrencies() {
+      const temp = this.fromCurrency;
+      this.fromCurrency = this.toCurrency;
+      this.toCurrency = temp;
+    },
   },
 };
 </script>
+
+
+<style scoped>
+.currency-inputs {
+  display: flex;
+  align-items: center;
+}
+
+.swap-icon {
+  cursor: pointer;
+  margin: 0 10px;
+  font-size: 1.5em;
+  color: #007bff; /* Change color to match your design */
+}
+
+.swap-icon:hover {
+  color: #0056b3; /* Change hover color to match your design */
+}
+</style>
+
 
 
 
