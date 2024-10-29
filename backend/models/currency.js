@@ -5,7 +5,7 @@ const currencySchema = new mongoose.Schema({
     code: {
         type: String,
         required: true,
-        unique: true, // Ensure the code is unique
+        unique: true, 
         uppercase: true,
         minlength: 3,
         maxlength: 3,
@@ -14,10 +14,11 @@ const currencySchema = new mongoose.Schema({
         type: Number, // Enforce rate as a Number (accepts float or int)
         required: true,
         validate: {
-          validator: Number.isFinite, // Ensure the rate is a finite number
-          message: props => `${props.value} is not a valid rate!`,
+            validator: Number.isFinite, // Ensure the rate is a finite number
+            message: props => `${props.value} is not a valid rate!`,
         },
-      },
+        min: [0, 'Rate must be greater than 0'], // min validation
+    },
 });
 
 const Currency = mongoose.model('currency', currencySchema);

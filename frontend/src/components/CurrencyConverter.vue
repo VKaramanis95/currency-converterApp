@@ -18,13 +18,15 @@
           v-model="toCurrency"
           @input="convertToUppercase('toCurrency')"
           type="text"
-          placeholder="e.g., EUR"
+          placeholder="e.g., EUR" 
           required
         />
       </div>
+      
       <div>
         <label for="amount">Amount:</label>
-        <input v-model="amount" type="number" required />
+        <input v-model="amount" type="number" step="any" required />
+        <div v-if="amountError" class="error">{{ amountError }}</div> <!-- Display amount error message -->
       </div>
       <button type="submit">Convert</button>
       <!-- Add the Refresh button -->
@@ -39,6 +41,7 @@
   </div>
 </template>
 
+
 <script>
 import axios from 'axios';
 
@@ -50,6 +53,7 @@ export default {
       toCurrency: '',
       convertedAmount: null,
       error: null,
+      amountError: null, // amount validation
     };
   },
   methods: {
@@ -59,6 +63,14 @@ export default {
     validateCurrencyCode(code) {
       return /^[A-Z]{3}$/.test(code);
     },
+    validateAmount() {
+      if (this.amount <= 0) {
+        this.amountError = 'Amount must be greater than 0.'; // Set the error message
+        return false;
+      }
+      this.amountError = null; // Clear error if valid
+      return true;
+    },
     async convertCurrency() {
       this.error = null; // Reset error before the request
       this.convertedAmount = null; // Reset the converted amount
@@ -67,6 +79,11 @@ export default {
       if (!this.validateCurrencyCode(this.fromCurrency) || !this.validateCurrencyCode(this.toCurrency)) {
         this.error = 'Currency codes must be exactly 3 letters (e.g., USD, EUR). Please enter valid codes.';
         return;
+      }
+
+      // Validate amount
+      if (!this.validateAmount()) {
+        return; // Stop execution if amount is invalid
       }
 
       console.log('Converting:', this.amount, this.fromCurrency, this.toCurrency); // Log input values
@@ -83,6 +100,7 @@ export default {
         this.error = err.response ? err.response.data.message : 'Network Error'; // Handle errors gracefully
       }
     },
+    
     // Method to reset the form
     resetForm() {
       this.amount = null;
@@ -90,10 +108,15 @@ export default {
       this.toCurrency = '';
       this.convertedAmount = null;
       this.error = null; // Clear any error message
+      this.amountError = null; // Clear amount error message
     },
   },
 };
 </script>
+
+
+
+
 
 
 

@@ -187,7 +187,7 @@ export default {
 
         
       } catch (err) {
-        this.error = 'Failed to update currency! It must be only numbers!';
+        this.error = 'Failed to update currency! It must be only numbers and greater than 0!';
       }
     },
 

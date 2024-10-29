@@ -33,14 +33,27 @@ exports.createCurrency = async (req, res) => {
 
 exports.updateCurrency = async (req, res) => {
   const { code, exchangeRateToUSD } = req.body;
+
+  // Validate exchange rate
+  if (exchangeRateToUSD <= 0) {
+    return res.status(400).json({ message: 'Exchange rate must be greater than 0' });
+  }
+
   try {
-    const currency = await Currency.findOneAndUpdate({ code }, { exchangeRateToUSD }, { new: true });
+    const currency = await Currency.findOneAndUpdate(
+      { code },
+      { exchangeRateToUSD },
+      { new: true }
+    );
+
     if (!currency) return res.status(404).json({ message: 'Currency not found' });
+
     res.json(currency);
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 exports.deleteCurrency = async (req, res) => {
   const { code } = req.params;
