@@ -21,7 +21,6 @@ This project is a full-stack application that provides currency conversion funct
 ├── controllers<br>
 │ ├── authController.js: Handles authentication-related operations, such as user registration, login, and logout.<br>
 │ └── currencyController.js: Manages currency-related operations, such as fetching currency rates and converting currencies.<br>
-│
 ├── middleware<br>
 │ └── authMiddleware.js: Contains middleware functions that verify the user's authentication status.<br>
 │
