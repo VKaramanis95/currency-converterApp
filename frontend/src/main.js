@@ -2,7 +2,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
-import '../../frontend/src/assets/style.css'; // Optional: Import your global styles
+import '../../frontend/src/assets/style.css';
 
 const app = createApp(App);
 
