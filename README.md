@@ -13,45 +13,45 @@ This project is a full-stack application that provides currency conversion funct
 - **Deployment**: Netlify (for frontend), Heroku/Render (for backend)
 
 ## Project Structure
-/backend
+/backend<br>
 │
-├── config
-│ └── db.js: Database connection setup
+├── config <br>
+│ └── db.js: Database connection setup<br>
 │
-├── controllers
-│ ├── authController.js: Handles authentication and user registration
-│ └── currencyController.js: CRUD operations for currency exchange rates
+├── controllers<br>
+│ ├── authController.js: Handles authentication and user registration<br>
+│ └── currencyController.js: CRUD operations for currency exchange rates<br>
 │
-├── middleware
-│ └── authMiddleware.js: Middleware for authentication and authorization
+├── middleware<br>
+│ └── authMiddleware.js: Middleware for authentication and authorization<br>
 │
-├── models
-│ ├── currency.js: Schema for currency data
-│ └── user.js: Schema for user data
+├── models<br>
+│ ├── currency.js: Schema for currency data<br>
+│ └── user.js: Schema for user data<br>
 │
-├── routes
-│ ├── authRoutes.js: Routes for login and registration
-│ ├── conversionRoutes.js: Routes for currency conversion
-│ └── currencyRoutes.js: Routes for currency management (CRUD)
+├── routes<br>
+│ ├── authRoutes.js: Routes for login and registration<br>
+│ ├── conversionRoutes.js: Routes for currency conversion<br>
+│ └── currencyRoutes.js: Routes for currency management (CRUD)<br>
 │
-├── .env: Environment variables
+├── .env: Environment variables<br>
 │
-└── server.js: Main server file
+└── server.js: Main server file<br>
 
 
-/frontend 
-├── assets │ 
-│   └── style.css: Styling for the application
-├── components │ 
-│   ├── CurrencyConverter.vue: Component for currency conversion
-│   ├── CurrencyManager.vue: Component for managing currencies and rates
-│   ├── Login.vue: Login form
-│   └── Register.vue: Registration form
-├── router │ 
-│   └── index.js: Vue Router setup 
-├── api.js: Handles API requests 
-├── App.vue: Root Vue component 
-└── main.js: Vue app entry point 
+/frontend <br>
+├── assets │ <br>
+│   └── style.css: Styling for the application<br>
+├── components │ <br>
+│   ├── CurrencyConverter.vue: Component for currency conversion<br>
+│   ├── CurrencyManager.vue: Component for managing currencies and rates<br>
+│   ├── Login.vue: Login form<br>
+│   └── Register.vue: Registration form<br>
+├── router │ <br>
+│   └── index.js: Vue Router setup<br> 
+├── api.js: Handles API requests <br>
+├── App.vue: Root Vue component <br>
+└── main.js: Vue app entry point <br>
 
 
 ## Installation
