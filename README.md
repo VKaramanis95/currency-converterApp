@@ -146,10 +146,10 @@ This project is a full-stack application that provides currency conversion funct
         }
 
 ### Error Handling
-All responses will include appropriate HTTP status codes. Common errors include:
-  -400 Bad Request: Invalid request parameters.
-  -401 Unauthorized: Authentication required or failed.
-  -404 Not Found: Requested resource does not exist.
+All responses will include appropriate HTTP status codes. Common errors include:<br>
+  -400 Bad Request: Invalid request parameters.<br>
+  -401 Unauthorized: Authentication required or failed.<br>
+  -404 Not Found: Requested resource does not exist.<br>
   -500 Internal Server Error: Server encountered an unexpected condition.
 
 
