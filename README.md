@@ -19,15 +19,15 @@ This project is a full-stack application that provides currency conversion funct
 │ └── db.js: Database connection setup<br>
 │
 ├── controllers<br>
-│ ├── authController.js: Handles authentication and user registration<br>
-│ └── currencyController.js: CRUD operations for currency exchange rates<br>
+│ ├── authController.js: Handles authentication-related operations, such as user registration, login, and logout.<br>
+│ └── currencyController.js: Manages currency-related operations, such as fetching currency rates and converting currencies.<br>
 │
 ├── middleware<br>
-│ └── authMiddleware.js: Middleware for authentication and authorization<br>
+│ └── authMiddleware.js: Contains middleware functions that verify the user's authentication status.<br>
 │
 ├── models<br>
-│ ├── currency.js: Schema for currency data<br>
-│ └── user.js: Schema for user data<br>
+│ ├── currency.js: Defines the currency schema for the database, representing currency data.<br>
+│ └── user.js: Defines the user schema for the database, representing user data<br>
 │
 ├── routes<br>
 │ ├── authRoutes.js: Routes for login and registration<br>
@@ -57,7 +57,7 @@ This project is a full-stack application that provides currency conversion funct
 ## Installation
 ### Prerequisites
   -Node.js
-  -MongoD# Project Structure
+  -MongoD
 
 ### Backend
     1. Clone the repository:
