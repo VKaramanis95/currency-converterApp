@@ -59,31 +59,6 @@ This project is a full-stack application that provides currency conversion funct
   -Node.js
   -MongoD# Project Structure
 
-## Backend
-# Project Structure
-
-## Backend
-- /backend
-  - config
-    - db.js: Database connection setup
-  - controllers
-    - authController.js: Handles authentication and user registration
-    - currencyController.js: CRUD operations for currency exchange rates
-  - middleware
-    - authMiddleware.js: Middleware for authentication and authorization
-  - models
-    - currency.js: Schema for currency data
-    - user.js: Schema for user data
-  - routes
-    - authRoutes.js: Routes for login and registration
-    - conversionRoutes.js: Routes for currency conversion
-    - currencyRoutes.js: Routes for currency management (CRUD)
-  - .env: Environment variables
-  - server.js: Main server file
-
-## Frontend
-
-
 ### Backend
     1. Clone the repository:
           git clone https://github.com/VKaramanis95/currency-converterApp.git
