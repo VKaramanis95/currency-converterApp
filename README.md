@@ -54,9 +54,6 @@ This project is a full-stack application that provides currency conversion funct
 
 
 ## Installation
-### Prerequisites
-  -Node.js
-  -MongoD
 
 ### Backend
     1. Clone the repository:
