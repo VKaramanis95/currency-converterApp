@@ -61,7 +61,7 @@ This project is a full-stack application that provides currency conversion funct
           cd backend
     2. Install Dependencies
           npm install
-    3. Set up your MongoDB database and update the .env file
+    3. Set up your MongoDB database and update the .env file(<b>.env.example make it .env </b>)
           MONGODB_URI=mongodb+srv://vkaramanis95:FQCGUzzXpSp4DxNF@cluster0.i46vk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
           JWT_SECRET=your_jwt_secret_key
           JWT_EXPIRES_IN=3600
