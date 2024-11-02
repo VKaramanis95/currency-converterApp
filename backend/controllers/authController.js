@@ -6,19 +6,27 @@ const jwt = require('jsonwebtoken');
 
 // Register
 exports.register = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, username, password } = req.body;
 
   try {
-    // Check if the user already exists
-    let user = await User.findOne({ username });
-    if (user) return res.status(400).json({ message: 'User already exists' });
+    // Check if the username already exists
+    let userByUsername = await User.findOne({ username });
+    if (userByUsername) {
+      return res.status(400).json({ message: 'Username already exists' });
+    }
+
+    // Check if the email already exists
+    let userByEmail = await User.findOne({ email });
+    if (userByEmail) {
+      return res.status(400).json({ message: 'Email already in use' });
+    }
 
     // Hash the password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // Create a new user
-    user = new User({ username, password: hashedPassword });
+    const user = new User({ email, username, password: hashedPassword });
     await user.save();
 
     // Create and sign the token

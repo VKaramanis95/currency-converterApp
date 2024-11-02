@@ -45,7 +45,7 @@
       <h3>Converted Amount: {{ convertedAmount }}</h3>
     </div>
 
-    <div v-if="error" class="error">{{ error }}</div> <!-- Display any error messages -->
+    <div v-if="error" class="error">{{ error }}</div>
   </div>
 </template>
 

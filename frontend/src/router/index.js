@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import CurrencyConverter from '../components/CurrencyConverter.vue';
 import CurrencyManager from '../components/CurrencyManager.vue';
-import Login from '../components/Login.vue';
-import Register from '../components/Register.vue';
+import Login from '../components/LoginComponent.vue';
+import Register from '../components/RegisterComponent.vue';
 
 const routes = [
     { path: '/', component: CurrencyConverter }, // Home page with currency converter

@@ -12,10 +12,10 @@
 
 <script>
 import axios from 'axios';
-import { useRouter } from 'vue-router'; // Import useRouter
+import { useRouter } from 'vue-router'; 
 
 export default {
-  name: 'LoginComponent', // Multi-word name
+  name: 'LoginComponent',
   data() {
     return {
       username: '',
