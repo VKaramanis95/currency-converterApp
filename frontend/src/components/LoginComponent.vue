@@ -6,7 +6,7 @@
       <input v-model="password" type="password" placeholder="Password" required />
       <button type="submit">Login</button>
     </form>
-    <div v-if="error" class="error">{{ error }}</div> <!-- Display error messages -->
+    <div v-if="error" class="error">{{ error }}</div>
   </div>
 </template>
 
@@ -20,28 +20,28 @@ export default {
     return {
       username: '',
       password: '',
-      error: null, // To store error messages
+      error: null, 
     };
   },
   setup() {
-    const router = useRouter(); // Use the router in setup
+    const router = useRouter();
     return { router };
   },
   methods: {
   async login() {
-    this.error = null; // Reset error before the request
+    this.error = null; 
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', {
         username: this.username,
         password: this.password,
       });
-      const token = response.data.token; // Get the token from the response
-      localStorage.setItem('token', token); // Store the token in local storage
-      this.$emit('login-success'); // Emit an event to notify the parent component
-      this.router.push('/manage-currencies'); // Redirect to CurrencyManager
+      const token = response.data.token; 
+      localStorage.setItem('token', token); 
+      this.$emit('login-success'); 
+      this.router.push('/manage-currencies'); 
     } catch (err) {
-      console.error(err); // Log the error for debugging
-      this.error = err.response ? err.response.data.message : 'Network Error'; // Handle errors gracefully
+      console.error(err); 
+      this.error = err.response ? err.response.data.message : 'Network Error'; 
     }
   },
 },

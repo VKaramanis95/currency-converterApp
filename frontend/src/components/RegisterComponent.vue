@@ -20,22 +20,32 @@ export default {
   name: 'RegisterComponent',
   data() {
     return {
-      email: '',           // New email field
+      email: '',           
       username: '',
       password: '',
-      confirmPassword: '',  // New confirm password field
-      error: null,          // To store error messages
-      successMessage: null, // To store success messages
+      confirmPassword: '',  
+      error: null,          
+      successMessage: null, 
     };
   },
   methods: {
+    isPasswordStrong(password) {
+      
+      const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      return strongPasswordRegex.test(password);
+    },
     async register() {
       this.error = null;
       this.successMessage = null;
 
-      // Check if passwords match
+     
       if (this.password !== this.confirmPassword) {
         this.error = 'Passwords do not match';
+        return;
+      }
+      
+      if (!this.isPasswordStrong(this.password)) {
+        this.error = 'Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.';
         return;
       }
 
@@ -48,11 +58,10 @@ export default {
         const token = response.data.token;
         localStorage.setItem('token', token);
 
-        // Show success message and redirect to main page
         this.successMessage = 'Registration successful! Redirecting...';
         setTimeout(() => {
           this.$router.push('/');
-        }, 2000); // Adjust delay as needed
+        }, 2000); 
       } catch (err) {
         console.error(err);
         this.error = err.response ? err.response.data.message : 'Network Error';

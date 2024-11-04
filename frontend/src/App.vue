@@ -15,28 +15,28 @@
       </nav>
     </header>
     <main>
-      <router-view @login-success="isLoggedIn = true"></router-view> <!-- Listen for login success -->
+      <router-view @login-success="isLoggedIn = true"></router-view>
     </main>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue'; // Import ref
-import { useRouter } from 'vue-router'; // Import useRouter
+import { ref } from 'vue'; 
+import { useRouter } from 'vue-router'; 
 
 export default {
   name: 'App',
   setup() {
-    const router = useRouter(); // Use the router
-    const isLoggedIn = ref(!!localStorage.getItem('token')); // Reactive variable
+    const router = useRouter(); 
+    const isLoggedIn = ref(!!localStorage.getItem('token')); 
 
     const logout = () => {
-      localStorage.removeItem('token'); // Clear the token
-      isLoggedIn.value = false; // Update the reactive variable
-      router.push('/'); // Redirect to home after logout
+      localStorage.removeItem('token'); 
+      isLoggedIn.value = false; 
+      router.push('/'); 
     };
     const goToCurrencyManager = () => {
-      router.push('/manage-currencies'); // Navigate to the Currency Manager page
+      router.push('/manage-currencies'); 
     };
 
     return { isLoggedIn, logout, goToCurrencyManager };

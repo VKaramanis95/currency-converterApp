@@ -34,7 +34,7 @@
 
     
       <div v-if="error" class="error">{{ error }}</div>
-      <div v-if="success" class="success">{{ success }}</div> <!-- Success message -->
+      <div v-if="success" class="success">{{ success }}</div>
     
 
     <div v-if="filteredCurrencies.length && !loading">
@@ -120,8 +120,8 @@ export default {
     },
 
     async addCurrency() {
-      this.error = null; // Clear previous error message
-      this.success = null; // Clear previous success message
+      this.error = null; 
+      this.success = null; 
 
       if (!this.validateCurrencyCode(this.newCurrency.code)) {
         this.error = 'Currency code must be exactly 3 letters';
@@ -143,7 +143,7 @@ export default {
         this.newCurrency.code = '';
         this.newCurrency.rate = null;
         this.fetchCurrencies(); // Refresh the list
-        this.success = 'Currency added successfully!'; // Set success message
+        this.success = 'Currency added successfully!'; 
       } catch (err) {
         this.error = 'Failed to add currency';
       }
@@ -151,11 +151,11 @@ export default {
 
     async deleteCurrency(id) {
       this.error = null;
-      this.success = null; // Clear success message
+      this.success = null; 
       try {
         await axios.delete(`http://localhost:5000/api/currency/${id}`);
-        this.fetchCurrencies(); // Refresh the list
-        this.success = 'Currency deleted successfully!'; // Optional success message for deletion
+        this.fetchCurrencies(); 
+        this.success = 'Currency deleted successfully!'; 
       } catch (err) {
         this.error = 'Failed to delete currency';
       }
@@ -172,7 +172,7 @@ export default {
 
     async updateCurrency(currency) {
       this.error = null;
-      this.success = null; // Clear success message
+      this.success = null; 
       try {
         await axios.put(`http://localhost:5000/api/currency/${currency.code}`, {
           rate: currency.newRate,
@@ -180,9 +180,7 @@ export default {
         currency.rate = currency.newRate;
         currency.isEditing = false;
         this.fetchCurrencies(); // Refresh the list
-        this.success = 'Currency updated successfully!'; // Optional success message for updates
-
-        // Clear the search query to reset the search input field
+        this.success = 'Currency updated successfully!'; 
         this.searchQuery = '';
 
         
@@ -199,9 +197,9 @@ export default {
     },
 
     logout() {
-      localStorage.removeItem('token'); // Clear the token
-      const router = useRouter(); // Use the router
-      router.push('/'); // Redirect to the main page
+      localStorage.removeItem('token'); 
+      const router = useRouter(); 
+      router.push('/');
     },
   },
 };

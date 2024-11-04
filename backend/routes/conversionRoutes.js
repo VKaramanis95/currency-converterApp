@@ -1,5 +1,5 @@
 const express = require('express');
-const currency = require('../models/currency'); // Correctly importing Currency model
+const currency = require('../models/currency'); 
 const router = express.Router();
 
 router.post('/convert', async (req, res) => {
@@ -9,12 +9,12 @@ router.post('/convert', async (req, res) => {
         const fromCurrency = await currency.findOne({ code: from });
         const toCurrency = await currency.findOne({ code: to });
 
-         // Check if the source currency exists
+         
          if (!fromCurrency) {
                 return res.status(404).json({ message: `Sorry, the currency '${from}' is not in the database.` });
          }
 
-         // Check if the target currency exists
+         
          if (!toCurrency) {
                 return res.status(404).json({ message: `Sorry, the currency '${to}' is not in the database.` });
          }

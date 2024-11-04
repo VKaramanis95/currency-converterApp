@@ -11,13 +11,13 @@ const currencySchema = new mongoose.Schema({
         maxlength: 3,
     },
     rate: {
-        type: Number, // Enforce rate as a Number (accepts float or int)
+        type: Number, 
         required: true,
         validate: {
-            validator: Number.isFinite, // Ensure the rate is a finite number
+            validator: Number.isFinite, 
             message: props => `${props.value} is not a valid rate!`,
         },
-        min: [0, 'Rate must be greater than 0'], // min validation
+        min: [0, 'Rate must be greater than 0'], 
     },
 });
 

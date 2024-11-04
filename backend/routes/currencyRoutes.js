@@ -3,7 +3,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const { body, param, validationResult } = require('express-validator');
-const Currency = require('../models/currency'); // Adjust path if necessary
+const Currency = require('../models/currency'); 
 const router = express.Router();
 
 // Middleware to handle validation errors
@@ -83,7 +83,7 @@ router.put(
     '/:identifier',
     [
         param('identifier').custom((value) => {
-            // Allow identifier to be either a 3-letter code or a valid ObjectId
+           
             return /^[A-Z]{3}$/.test(value) || mongoose.Types.ObjectId.isValid(value);
         }).withMessage('Identifier must be a 3-letter code or a valid ObjectId.'),
         body('rate')
