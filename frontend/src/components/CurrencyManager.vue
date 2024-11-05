@@ -127,8 +127,7 @@ export default {
         this.error = 'Currency code must be exactly 3 letters';
         return;
       }
-
-      // Check if currency already exists
+      
       const existingCurrency = this.currencies.find(currency => currency.code === this.newCurrency.code.toUpperCase());
       if (existingCurrency) {
         this.error = 'Currency already exists! Please provide a unique currency code.';
@@ -142,7 +141,7 @@ export default {
         });
         this.newCurrency.code = '';
         this.newCurrency.rate = null;
-        this.fetchCurrencies(); // Refresh the list
+        this.fetchCurrencies(); 
         this.success = 'Currency added successfully!'; 
       } catch (err) {
         this.error = 'Failed to add currency';
