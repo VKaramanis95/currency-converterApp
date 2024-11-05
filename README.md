@@ -19,8 +19,7 @@ This project is a full-stack application that provides currency conversion funct
 │ └── db.js: Database connection setup<br>
 │
 ├── controllers<br>
-│ ├── authController.js: Handles authentication-related operations, such as user registration, login, and logout.<br>
-│ └── currencyController.js: Manages currency-related operations, such as fetching currency rates and converting currencies.<br>
+│ └── authController.js: Handles authentication-related operations, such as user registration, login, and logout.<br>
 ├── middleware<br>
 │ └── authMiddleware.js: Contains middleware functions that verify the user's authentication status.<br>
 │
@@ -48,7 +47,6 @@ This project is a full-stack application that provides currency conversion funct
 │   └── Register.vue: Registration form<br>
 ├── router │ <br>
 │   └── index.js: Vue Router setup<br> 
-├── api.js: Handles API requests <br>
 ├── App.vue: Root Vue component <br>
 └── main.js: Vue app entry point <br>
 
