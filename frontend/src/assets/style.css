@@ -216,4 +216,40 @@ nav a:hover, nav button:hover {
 main {
     padding: 20px;
 }
+
+.currency-inputs {
+  display: flex;
+  align-items: center;
+}
+
+.swap-icon {
+  cursor: pointer;
+  margin: 0 10px;
+  font-size: 1.5em;
+  color: #007bff;
+}
+
+.swap-icon:hover {
+  color: #0056b3;
+}
+
+.suggestions {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  background: white;
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+  position: absolute;
+}
+
+.suggestions li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestions li:hover {
+  background: #eee;
+}
   
