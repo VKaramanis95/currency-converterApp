@@ -10,7 +10,6 @@ This project is a full-stack application that provides currency conversion funct
 - **Frontend**: Vue.js, Axios
 - **Validation**: express-validator
 - **Authentication**: JWT (JSON Web Tokens) for protected routes
-- **Deployment**: Netlify (for frontend), Heroku/Render (for backend)
 
 ## Project Structure
 /backend<br>
@@ -22,7 +21,6 @@ This project is a full-stack application that provides currency conversion funct
 │ └── authController.js: Handles authentication-related operations, such as user registration, login, and logout.<br>
 ├── middleware<br>
 │ └── authMiddleware.js: Contains middleware functions that verify the user's authentication status.<br>
-│
 ├── models<br>
 │ ├── currency.js: Defines the currency schema for the database, representing currency data.<br>
 │ └── user.js: Defines the user schema for the database, representing user data<br>
