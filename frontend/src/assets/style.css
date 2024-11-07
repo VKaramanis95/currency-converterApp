@@ -250,6 +250,7 @@ main {
 }
 
 .suggestions li:hover {
-  background: #eee;
+  color:white;
+  background:#007bff;
 }
   
