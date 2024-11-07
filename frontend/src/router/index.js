@@ -19,15 +19,28 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const isAuthenticated = !!localStorage.getItem('token'); 
+
+    if (to.path === '/manage-currencies' && !isAuthenticated) {
+        const registerIndex = routes.findIndex(route => route.path === '/register');
+        if (registerIndex !== -1) {
+            routes.splice(registerIndex, 1);
+        }
+    }
+    
     if (to.path === '/manage-currencies' && !isAuthenticated) {
         next('/login'); 
-    } else if (to.path === '/login' && isAuthenticated) {
-        
-        next('/'); 
-    }else if (to.path === '/logout') {
-        
+    } 
+    
+    else if (to.path === '/login' && isAuthenticated) {
         next('/'); 
     }
+    else if (to.path === '/register' && isAuthenticated) {
+        next('/'); 
+    }
+    
+    else if (to.path === '/logout') {
+        next('/'); 
+    }    
     else {
         next();
     }

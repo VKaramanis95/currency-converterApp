@@ -39,7 +39,7 @@
       </div>
       <div>
         <label for="amount">Amount:</label>
-        <input v-model="amount" type="number" step="any" required />
+        <input v-model="amount" type="number" step="any" min="0" required />
         <div v-if="amountError" class="error">{{ amountError }}</div>
       </div>
       <button type="submit">Convert</button>

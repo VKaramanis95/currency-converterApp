@@ -57,10 +57,11 @@ export default {
         });
         const token = response.data.token;
         localStorage.setItem('token', token);
+        
 
         this.successMessage = 'Registration successful! Redirecting...';
         setTimeout(() => {
-          this.$router.push('/');
+          this.$router.push('/manage-currencies');
         }, 2000); 
       } catch (err) {
         console.error(err);
